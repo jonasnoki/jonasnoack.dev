@@ -1,0 +1,22 @@
+---
+type Props = {
+    category: string
+    active: boolean
+    useAnimation: boolean
+}
+
+const {category, active, useAnimation} = Astro.props
+const border = active ? "border-asparagus" : "border-dark_slate_gray"
+const href = active ? `/category/all` : `/category/${category}`
+const style = useAnimation
+    ? `view-transition-name: category-${category};`
+    : null
+---
+
+<a
+    href={href}
+    style={style}
+    class=`text-default uppercase px-2 py-1 border-2 whitespace-nowrap ${border}`
+>
+    {category}
+</a>

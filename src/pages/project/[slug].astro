@@ -1,0 +1,71 @@
+---
+import {getCollection, getEntryBySlug} from "astro:content"
+import {Image} from "astro:assets"
+
+import Layout from "../../layouts/Layout.astro"
+import ProjectList from "../../components/ProjectList.astro"
+import CategoryList from "../../components/CategoryList.astro"
+import Main from "../../components/Main.astro"
+import H1 from "../../components/H1.astro"
+import ProjectTitle from "../../components/ProjectTitle.astro"
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects")
+    return projects.map(project => ({params: {slug: project.slug}}))
+}
+
+const {slug} = Astro.params
+
+const project = await getEntryBySlug("projects", slug as string)
+
+if (!project) {
+    return Astro.redirect("/404")
+}
+
+const projects = await getCollection("projects")
+const remainingProjects = projects.filter(p => p.slug !== project.slug)
+const relatedProjects = remainingProjects.filter(p =>
+    p.data.categories.some(category =>
+        project.data.categories.includes(category),
+    ),
+)
+
+const {Content, headings} = await project.render()
+---
+
+<Layout title={project.data.title} back={true}>
+    <Main back={true}>
+        <div class="relative">
+            <Image
+                src={project.data.logo}
+                alt={project.data.company}
+                width={1512}
+                height={944}
+                class="mb-10 object-center bg-transparent"
+                style={`view-transition-name: image-${project.slug};`}
+            />
+        </div>
+
+        <p class="text-xl mb-2">{project.data.type}</p>
+
+        <ProjectTitle id={`title-${project.slug}`} title={project.data.title} />
+
+        <div class="mb-4">
+            <CategoryList
+                categories={project.data.categories}
+                id={`tags-${project.slug}`}
+            />
+        </div>
+
+        <div class="relative">
+            <div
+                class="prose prose-xl max-w-full overflow-visible relative"
+                style={`view-transition-name: body-${project.slug};`}
+            >
+                <Content />
+            </div>
+        </div>
+        <p class="text-default text-4xl my-16">Related projects</p>
+        <ProjectList projects={relatedProjects} />
+    </Main>
+</Layout>

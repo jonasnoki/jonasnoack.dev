@@ -1,0 +1,12 @@
+---
+import Back from "./Back.astro"
+
+const {back = false} = Astro.props
+---
+
+<main class="bg-white py-10 w-full">
+    <div class="md:max-w-7xl md:m-auto px-6">
+        {back === true ? <Back /> : null}
+        <slot />
+    </div>
+</main>

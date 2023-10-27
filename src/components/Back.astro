@@ -1,0 +1,14 @@
+---
+type Props = {
+    category: string
+}
+
+const {category} = Astro.props
+---
+
+<button
+    onclick="history.back()"
+    class="text-default text-xl py-1 px-2 border-2 border-teal-900 whitespace-nowrap min-w-[100px] mb-6"
+>
+    &lt;- Back
+</button>

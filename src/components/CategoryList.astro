@@ -1,0 +1,47 @@
+---
+import type {CollectionEntry} from "astro:content"
+import Category from "./Category.astro"
+type Props = {
+    categories: CollectionEntry<"projects">["data"]["categories"]
+    title?: string
+    id?: string
+    activeCategory?: string
+}
+
+const {categories, title, id, activeCategory} = Astro.props
+// sort categories by name
+categories.sort((a, b) => a.localeCompare(b))
+// find active category and move it to the front
+const activeIndex = categories.indexOf(activeCategory)
+if (activeIndex > 0) {
+    categories.splice(0, 0, categories.splice(activeIndex, 1)[0])
+}
+
+const style = id ? `view-transition-name: ${id};` : null
+---
+
+<div
+    class="grid grid-cols-[auto,1fr] gap-x-14 gap-y-3 max-lg:grid-cols-1"
+    style={style}
+>
+    {
+        title ? (
+            <h2 class="text-2xl  max-lg:mb-0 max-lg:text-3xl align-center">
+                {title}
+            </h2>
+        ) : null
+    }
+    <div class="w-full overflow-auto max-md:pb-3">
+        <div class="flex gap-4 md:flex-wrap items-center">
+            {
+                categories.map(category => (
+                    <Category
+                        category={category}
+                        active={activeCategory === category}
+                        useAnimation={!!activeCategory}
+                    />
+                ))
+            }
+        </div>
+    </div>
+</div>

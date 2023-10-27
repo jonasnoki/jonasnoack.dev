@@ -1,0 +1,13 @@
+---
+import {Content as Impressum} from "../components/impressum.md"
+import Layout from "../layouts/Layout.astro"
+import Main from "../components/Main.astro"
+---
+
+<Layout>
+    <Main back={true}>
+        <div class="prose max-w-full">
+            <Impressum />
+        </div>
+    </Main>
+</Layout>

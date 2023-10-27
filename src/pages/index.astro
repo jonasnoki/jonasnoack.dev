@@ -1,0 +1,42 @@
+---
+import {getCollection} from "astro:content"
+
+import Layout from "../layouts/Layout.astro"
+import ProjectList from "../components/ProjectList.astro"
+import CategoryList from "../components/CategoryList.astro"
+import Main from "../components/Main.astro"
+
+const allProjects = await getCollection("projects")
+const projects = allProjects
+const allCategories = allProjects.flatMap(project => project.data.categories)
+const categories = Array.from(new Set(allCategories))
+---
+
+<Layout>
+    <Main>
+        <p class="text-2xl mb-6">
+            Hey, I'm Jonas Noack. I'm a software engineer and frontend developer
+            from Berlin, Germany. I'm passionate about building digital products
+            and helping others to do so.
+        </p>
+        <p class="text-2xl mb-14">
+            Here you can explore some of the projects I've done so far. If you
+            want to get in touch, feel free to <a
+                class="underline"
+                href="mailto:jonasnoackgruen@gmail.com">send me an email</a
+            >.
+        </p>
+
+        <div class="mb-10">
+            <CategoryList
+                categories={categories}
+                title="Filter By"
+                id={`tags-main`}
+            />
+        </div>
+
+        <div class="mb-10">
+            <ProjectList projects={projects} />
+        </div>
+    </Main>
+</Layout>
