@@ -4,4 +4,4 @@ This repository holds the source code for portfolio page [jonasnoack.dev](https:
 
 ## Questions?
 
-Send me an email at jonasnoackgruewn@gmail.com
+Send me an email at jonasnoackgruen@gmail.com
