@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap"
 // https://astro.build/config
 export default defineConfig({
     integrations: [tailwind(), sitemap()],
-    output: "static",
+    output: "server",
     site: "https://jonasnoack.dev",
     server: {
         port: 3000,

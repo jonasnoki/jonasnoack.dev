@@ -1,5 +1,5 @@
 ---
-import {CollectionEntry, getCollection} from "astro:content"
+import {getCollection} from "astro:content"
 import CategoryList from "../../components/CategoryList.astro"
 import Main from "../../components/Main.astro"
 import ProjectList from "../../components/ProjectList.astro"
@@ -7,7 +7,7 @@ import Layout from "../../layouts/Layout.astro"
 
 export async function getAllCategories() {
     const projects = await getCollection("projects")
-    const categories = Array.from(
+    return Array.from(
         projects.reduce((categories, project) => {
             project.data.categories.forEach(category =>
                 categories.add(category),
@@ -15,7 +15,6 @@ export async function getAllCategories() {
             return categories
         }, new Set()),
     )
-    return categories
 }
 export async function getStaticPaths() {
     const categories = await getAllCategories()
@@ -29,14 +28,15 @@ export async function getStaticPaths() {
     })
     return paths
 }
+const { category } = Astro.params;
 
-const {activeCategory, categories} = Astro.props
+const categories = await getAllCategories()
 const allProjects = await getCollection("projects")
 const projects =
-    activeCategory === "all"
+    category === "all"
         ? allProjects
         : allProjects.filter(project =>
-              project.data.categories.includes(activeCategory),
+              project.data.categories.includes(category),
           )
 ---
 
@@ -44,7 +44,7 @@ const projects =
     <Main>
         <div class="mb-6">
             <CategoryList
-                activeCategory={activeCategory}
+                activeCategory={category}
                 categories={categories}
                 title="Filter By"
                 id={`tags-main`}
